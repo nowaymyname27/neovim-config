@@ -1,0 +1,5 @@
+-- -- Navigate wrapped lines
+-- vim.keymap.set('n', 'j', 'gj', { desc = "Move down (wrapped)" })
+-- vim.keymap.set('n', 'k', 'gk', { desc = "Move up (wrapped)" })
+--
+-- vim.opt.cursorline = false -- Don't highlight the current line

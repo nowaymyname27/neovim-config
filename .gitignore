@@ -1,0 +1,11 @@
+# macOS system files
+.DS_Store
+
+# Neovim swap and backup files
+*.swp
+*.swo
+*~
+.netrwhist
+
+# Undo history (if you ever change undodir to be inside this folder)
+undo/
