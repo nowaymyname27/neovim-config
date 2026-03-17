@@ -21,10 +21,17 @@ return {
       local servers = {
         "lua_ls",
         "pyright",
-        "ts_ls",
         "clangd",
-        "jdtls",
         "ocamllsp",
+        "zls",
+
+        -- Web Dev
+        "ts_ls",
+        "html",
+        "cssls",
+        "tailwindcss",
+        "eslint",
+        "emmet_ls",
       }
 
       -- Loop through the list and set them up
@@ -40,7 +47,7 @@ return {
           local c = vim.lsp.get_client_by_id(args.data.client_id)
           if not c then return end
 
-          if vim.bo.filetype == "lua" then
+          if vim.bo.filetype == "lua" or vim.bo.filetype == "zig" then
             vim.api.nvim_create_autocmd('BufWritePre', {
               buffer = args.buf,
               callback = function()

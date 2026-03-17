@@ -1,27 +1,35 @@
 return {
   'stevearc/oil.nvim',
-  dependencies = { "nvim-tree/nvim-web-devicons" }, -- Optional, for file icons
+  dependencies = { "nvim-tree/nvim-web-devicons" },
   config = function()
     require("oil").setup({
       default_file_explorer = true,
-      -- Use a keymap to open oil (I recommend '-')
-      keymaps = {
-        ["g?"] = "actions.show_help",
-        ["<CR>"] = "actions.select",
-        ["<C-s>"] = "actions.select_vsplit",
-        ["<C-h>"] = "actions.select_split",
-        ["<C-t>"] = "actions.select_tab",
-        ["<C-p>"] = "actions.preview",
-        ["<C-c>"] = "actions.close",
-        ["-"] = "actions.parent",
-        ["_"] = "actions.open_cwd",
+      skip_confirm_for_simple_edits = true,
+
+      columns = {
+        "icon",
+      },
+      win_options = {
+        winblend = 0,
       },
       view_options = {
         show_hidden = true,
+        is_always_hidden = function(name, bufnr)
+          return name == ".." or name == ".git"
+        end,
+      },
+      float = {
+        padding = 2,
+        max_width = 80,
+        max_height = 20,
+        border = "rounded",
+        win_options = {
+          winblend = 0,
+        },
       },
     })
 
-    -- Map '-' to open Oil
-    vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+    vim.keymap.set("n", "-", "<CMD>Oil --float<CR>", { desc = "Open parent directory in float" })
+    vim.keymap.set("n", "<leader>pv", "<CMD>Oil --float<CR>", { desc = "Project View (Float)" })
   end
 }

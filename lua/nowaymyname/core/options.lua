@@ -18,10 +18,14 @@ vim.opt.smartindent = true
 
 -- Enable break indent
 vim.opt.breakindent = true
+vim.opt.showbreak = "↳ "
 
 -- Backup files
 vim.opt.backup = false      -- Don't create backup files
 vim.opt.writebackup = false -- Don't create backup before overwriting a file
+
+vim.opt.wrap = false        -- Disable line wrapping by default
+vim.opt.sidescrolloff = 8   -- Keep 8 characters of context when scrolling horizontally
 
 -- Folding
 vim.opt.foldmethod = "indent" -- Fold based on indentation

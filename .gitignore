@@ -9,3 +9,6 @@
 
 # Undo history (if you ever change undodir to be inside this folder)
 undo/
+
+# Local agent instructions file
+AGENTS.md

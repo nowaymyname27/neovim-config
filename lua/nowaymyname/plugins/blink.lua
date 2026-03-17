@@ -3,26 +3,24 @@ return {
   version = "*",
   dependencies = "rafamadriz/friendly-snippets",
   opts = {
+    -- 1. General Keymaps (for writing code)
     keymap = {
-      preset = "none", -- We switch to 'none' to define everything manually
+      preset = "none",
 
-      -- THE ONE BUTTON ACCEPT (Enter or your remapped Caps Lock)
-      ['<CR>'] = { 'select_and_accept', 'fallback' },
+      -- Accept suggestion with Enter
+      ['<CR>'] = { 'accept', 'fallback' },
 
-      -- NAVIGATION (Vim-style)
-      -- When menu is open, move through list. When closed, move through splits.
+      -- Navigate list
       ['<C-j>'] = { 'select_next', 'fallback' },
       ['<C-k>'] = { 'select_prev', 'fallback' },
 
-      -- TAB is kept empty for tabout.nvim
-      ['<Tab>'] = {},
-      ['<S-Tab>'] = {},
-
-      -- Useful Extras
-      ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
-      ['<C-e>'] = { 'hide', 'fallback' },
+      -- Scroll docs
       ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
       ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
+
+      -- Ensure these are NOT mapped so Neotab can have them
+      ['<Tab>'] = { 'fallback' },
+      ['<S-Tab>'] = { 'fallback' },
     },
 
     appearance = {
@@ -30,8 +28,52 @@ return {
       nerd_font_variant = 'mono'
     },
 
+    completion = {
+      menu = { auto_show = true },
+      ghost_text = { enabled = false },
+    },
+
+    -- 2. Define Sources
     sources = {
       default = { 'lsp', 'path', 'snippets', 'buffer' },
+
+      -- Explicitly define providers so cmdline can find them
+      providers = {
+        lsp = { name = 'lsp', module = 'blink.cmp.sources.lsp' },
+        path = { name = 'path', module = 'blink.cmp.sources.path' },
+        snippets = { name = 'snippets', module = 'blink.cmp.sources.snippets' },
+        buffer = { name = 'buffer', module = 'blink.cmp.sources.buffer' },
+      },
+    },
+
+    -- 3. Command Line Logic (The Bar at the bottom)
+    cmdline = {
+      enabled = true,
+      keymap = {
+        preset = 'none',
+
+        -- ENTER: Ignores the menu and runs the command immediately.
+        ['<CR>'] = { 'fallback' },
+
+        -- CTRL + y: Accepts the selected suggestion
+        ['<C-y>'] = { 'accept', 'fallback' },
+
+        -- NAVIGATION
+        ['<C-j>'] = { 'select_next', 'fallback' },
+        ['<C-k>'] = { 'select_prev', 'fallback' },
+
+        -- TAB: Useful for cycling through files in command mode
+        ['<Tab>'] = { 'select_next', 'fallback' },
+        ['<S-Tab>'] = { 'select_prev', 'fallback' },
+      },
+      sources = function()
+        local type = vim.fn.getcmdtype()
+        -- Search mode (/) uses buffer words
+        if type == '/' or type == '?' then return { 'buffer' } end
+        -- Command mode (:) uses command history and file paths
+        if type == ':' then return { 'cmdline', 'path' } end
+        return {}
+      end
     },
 
     signature = { enabled = true }
